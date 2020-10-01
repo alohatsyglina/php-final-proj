@@ -1,0 +1,29 @@
+<form action='personalinfo.php' method='post'>
+Добавление новой услуги: </br>
+<input type='text' name='newserv'>
+<input type='submit' name='go' value='Добавить'>
+</form>
+<?php
+if(isset($_REQUEST['go'])){
+    $title=mysqli_real_escape_string($connection, $_REQUEST['newserv']);
+    $delete=mysqli_query($connection,
+    "INSERT IGNORE INTO service(title) VALUES('$title')");
+}
+
+$sql=mysqli_query($connection,
+"SELECT id, title FROM service");
+$res=mysqli_fetch_all($sql, MYSQLI_BOTH);?>
+<form action='personalinfo.php' method='post'>
+Удаление услуги:</br>
+<select name='serv_list'><?php
+ for($i=0;$i<mysqli_num_rows($sql);$i++) { ?>
+    </br>
+    <option name="<?php print_r($res[$i]['id']);?>" value="<?php print_r($res[$i]['id']);?>"><?php print_r($res[$i]['title'])?></option> <?php 
+} ?></select>
+<input type='submit' name='gogo' value='Удалить'>
+</form>
+<?php
+if(isset($_REQUEST['gogo'])){
+    $deletething=mysqli_real_escape_string($connection, $_REQUEST['serv_list']);
+    $deletesql=mysqli_query($connection,
+    "DELETE FROM service WHERE id='$deletething'");
